@@ -1,0 +1,57 @@
+//#include 'avr/interrupt.h'
+
+#define mosfetPin 1
+#define ledPin 0
+#define killPin 4
+#define trigger 3
+
+int offState;
+
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(mosfetPin, OUTPUT);
+  pinMode(ledPin, OUTPUT);
+  pinMode(killPin, INPUT);
+  pinMode(trigger, INPUT_PULLUP);
+
+//  GIMSK = 0b00100000;
+//  PCMSK = 0b00010011;
+//  sei();
+  
+  offState = 1;
+  
+  digitalWrite(mosfetPin, LOW);
+  digitalWrite(ledPin, LOW);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+    
+
+  
+ 
+  if(offState == 0){
+    digitalWrite(mosfetPin, HIGH);
+    digitalWrite(ledPin, HIGH);
+  } else {
+   if (!digitalRead(trigger)){
+    delay(200);
+   if(!digitalRead(trigger)){
+    offState = 0;
+   }
+   }
+    digitalWrite(mosfetPin, LOW);
+    digitalWrite(ledPin, LOW);
+  }
+
+  if(digitalRead(killPin)){
+    offState = 1;
+  }
+
+}
+
+//
+//ISR(PCINT4_vect) {
+//  offState = 1;
+//}
